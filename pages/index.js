@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Container, TextField, Button, Select, MenuItem, Typography, Box } from '@mui/material';
+import { Container, TextField, Button, Select, MenuItem, Typography, Box, FormControl, InputLabel } from '@mui/material';
+import FormHelperText from '@mui/material/FormHelperText';
 
 export default function Home() {
   const [accountId, setAccountId] = useState('');
@@ -48,28 +49,37 @@ export default function Home() {
         Enter an account ID to query the Dock blockchain archives for account or token transfer information.
       </Typography>
       <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <TextField
-          label="Account ID"
-          variant="outlined"
-          value={accountId}
-          onChange={handleAccountIdChange}
-          required
-        />
-        <Select
-          value={consensus}
-          onChange={handleConsensusChange}
-          variant="outlined"
-        >
-          <MenuItem value="poa">Proof of Authority</MenuItem>
-        </Select>
-        <Select
-          value={type}
-          onChange={handleTypeChange}
-          variant="outlined"
-        >
-          <MenuItem value="account">Account Information</MenuItem>
-          <MenuItem value="transfer">Token Transfer Information</MenuItem>
-        </Select>
+        <FormControl>
+          <TextField
+            label="Account ID"
+            variant="outlined"
+            value={accountId}
+            onChange={handleAccountIdChange}
+            required
+          />
+          <FormHelperText>The account to retrieve data for</FormHelperText>
+        </FormControl>
+        <FormControl>
+          <Select
+            value={consensus}
+            onChange={handleConsensusChange}
+            variant="outlined"
+          >
+            <MenuItem value="poa">Proof of Authority</MenuItem>
+          </Select>
+           <FormHelperText>The version of the Dock network you want to query</FormHelperText>
+        </FormControl>
+        <FormControl>
+          <Select
+            value={type}
+            onChange={handleTypeChange}
+            variant="outlined"
+          >
+            <MenuItem value="account">Account Information</MenuItem>
+            <MenuItem value="transfer">Token Transfer Information</MenuItem>
+          </Select>
+           <FormHelperText>The type of data to query</FormHelperText>
+        </FormControl>
         <Button type="submit" variant="contained" color="primary">
           Query
         </Button>
