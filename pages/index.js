@@ -4,11 +4,12 @@ import { Container, TextField, Button, Select, MenuItem, Typography, Box } from 
 export default function Home() {
   const [accountId, setAccountId] = useState('');
   const [type, setType] = useState('account');
+  const [consensus, setConsensus] = useState('poa');
   const [results, setResults] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch(`/api/query?accountId=${accountId}&type=${type}`);
+    const res = await fetch(`/api/query?accountId=${accountId}&type=${type}&consensus=${consensus}`);
     const data = await res.json();
     setResults(data);
   };
@@ -23,6 +24,11 @@ export default function Home() {
     setResults([]);
   };
 
+  const handleConsensusChange = (e) => {
+    setConsensus(e.target.value);
+    setResults([]);
+  };
+
   const handleDownload = () => {
     const blob = new Blob([JSON.stringify(results, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -34,7 +40,7 @@ export default function Home() {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <Typography variant="h4" component="h1" gutterBottom>
         Dock Blockchain Archives
       </Typography>
@@ -50,6 +56,13 @@ export default function Home() {
           required
         />
         <Select
+          value={consensus}
+          onChange={handleConsensusChange}
+          variant="outlined"
+        >
+          <MenuItem value="poa">Proof of Authority</MenuItem>
+        </Select>
+        <Select
           value={type}
           onChange={handleTypeChange}
           variant="outlined"
@@ -61,11 +74,11 @@ export default function Home() {
           Query
         </Button>
       </Box>
-      <Box component="pre" sx={{ mt: 4, p: 2, backgroundColor: '#f5f5f5', borderRadius: 1 }}>
-        {JSON.stringify(results, null, 2)}
+      <Box sx={{ flexGrow: 1, overflow: 'auto', mt: 4, p: 2, backgroundColor: '#f5f5f5', borderRadius: 1 }}>
+        <pre>{JSON.stringify(results, null, 2)}</pre>
       </Box>
       {results.length > 0 && (
-        <Button variant="contained" color="secondary" onClick={handleDownload} sx={{ mt: 2 }}>
+        <Button variant="contained" color="secondary" onClick={handleDownload} sx={{ mt: 2, mb: 2 }}>
           Download JSON
         </Button>
       )}

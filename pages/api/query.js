@@ -1,18 +1,26 @@
 import fs from 'fs';
 import path from 'path';
 
-export default function handler(req, res) {
-  const { accountId, type } = req.query;
+  const consensusConfig = {
+    poa: {
+      account: 'dock-poa-accounts.json',
+      transfer: 'dock-poa-transfers.json'
+    }
+  };
+
+  export default function handler(req, res) {
+  const { accountId, type, consensus } = req.query;
 
   if (!accountId || !type) {
     return res.status(400).json({ error: 'Missing accountId or type' });
   }
 
+  const config = consensusConfig[consensus]
+  if (!config) {
+    return res.status(400).json({ error: 'Invalid network consensus type' });
+  }
+
   const dataDir = path.join(process.cwd(), 'archives', 'poa');
-  const config = {
-    account: 'dock-poa-accounts.json',
-    transfer: 'dock-poa-transfers.json'
-  };
 
   const fileName = config[type];
   if (!fileName) {
