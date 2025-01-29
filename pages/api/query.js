@@ -5,7 +5,12 @@ import path from 'path';
     poa: {
       account: 'dock-poa-accounts.json',
       transfer: 'dock-poa-transfers.json'
+    },
+    pos: {
+      account: 'dock-pos-accounts.json',
+      transfer: 'dock-pos-transfers.json'
     }
+
   };
 
   export default function handler(req, res) {
@@ -20,7 +25,7 @@ import path from 'path';
     return res.status(400).json({ error: 'Invalid network consensus type' });
   }
 
-  const dataDir = path.join(process.cwd(), 'archives', 'poa');
+  const dataDir = path.join(process.cwd(), 'archives', consensus);
 
   const fileName = config[type];
   if (!fileName) {
