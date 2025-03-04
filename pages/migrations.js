@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Container, Button, Typography, Box, FormControl, InputLabel, Select, MenuItem, TextField } from '@mui/material';
+import { Container, Button, Typography, Box, FormControl, InputLabel, Select, MenuItem, TextField, CircularProgress } from '@mui/material';
 import dynamic from 'next/dynamic';
 
 const DOCK_SS58_FORMAT = 22;
@@ -10,6 +10,7 @@ const Migrations = () => {
   const [message, setMessage] = useState('');
   const [signature, setSignature] = useState('');
   const [balance, setBalance] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const enableExtension = async () => {
@@ -28,7 +29,17 @@ const Migrations = () => {
     enableExtension();
   }, []);
 
+  function convertDockToCheqd(dockBalance) {
+    if (!dockBalance) {
+      return 0;
+    }
+    const swapRatio = 18.5178;
+    const cheqdBalance = dockBalance / swapRatio;
+    return cheqdBalance;
+  }
+
   const fetchAccountBalance = async (accountId) => {
+    setLoading(true);
     const res = await fetch(`/api/query?accountId=${accountId}&type=account&consensus=pos`);
     const data = await res.json();
     let tokenBalance = 0;
@@ -36,6 +47,7 @@ const Migrations = () => {
       tokenBalance = data[0].balance;
     } 
     setBalance(tokenBalance);
+    setLoading(false);
     
     return tokenBalance;
   };
@@ -142,16 +154,20 @@ const Migrations = () => {
         </Select>
         Select the DOCK account to migrate
         {selectedAccount && (
-          <Box>
-            <Typography variant="body1" sx={{ mt: 2 }}>
-              DOCK Balance: {balance} DOCK<br />
-              Migrated CHEQ Balance: {balance/18.5178} CHEQ
-            </Typography>
-            <Typography variant="body1" sx={{ wordBreak: 'break-all', mt: 2 }}
-              label="Message"
-            >
-              Migration data: {JSON.stringify(message, null, "\t")}
-            </Typography>
+          <Box label="accountDetails" sx={{ mt: 2, p: 2, backgroundColor: '#f5f5f5', borderRadius: 1 }}>
+            {loading ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                <CircularProgress />
+                <Typography variant="body1" sx={{ ml: 2 }}>Fetching balance...</Typography>
+              </Box>
+            ) : (
+              <>
+                <Typography variant="body1" sx={{ mt: 2 }}>
+                  DOCK Balance: {balance} DOCK<br />
+                  Expected migrated CHEQ Balance: {convertDockToCheqd(balance)} CHEQ
+                </Typography>
+              </>
+            )}
           </Box>
         )}
       </FormControl>
@@ -160,6 +176,11 @@ const Migrations = () => {
       </Button>
       {signature && (
         <Box sx={{ mt: 2, p: 2, backgroundColor: '#f5f5f5', borderRadius: 1 }}>
+          <Typography variant="body1" sx={{ wordBreak: 'break-all', mt: 2 }}
+            label="Message"
+          >
+            Migration data: {JSON.stringify(message, null, "\t")}
+          </Typography>
           <Typography variant="body1">Signature:</Typography>
           <Typography variant="body2" sx={{ wordBreak: 'break-all' }}>
             {signature}
