@@ -14,6 +14,7 @@ const Migrations = () => {
   const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(false);
   const [cheqdAddressError, setCheqdAddressError] = useState('');
+  const [alreadyMigrated, setAlreadyMigrated] = useState(false);
 
   useEffect(() => {
     const enableExtension = async () => {
@@ -55,17 +56,27 @@ const Migrations = () => {
     return tokenBalance;
   };
 
+  const checkIfAlreadyMigrated = async (accountId) => {
+    const res = await fetch(`/api/migrations?accountId=${accountId}`);
+    const data = await res.json();
+    return data.alreadyMigrated;
+  };
+
   const handleSelectedAccountChange = async (e) => {
     const accountId = e.target.value;
     setSelectedAccount(accountId);
-    const tokens = await fetchAccountBalance(accountId);
-    const migrationData = {
-      dockAccount: accountId,
-      cheqdAccount: cheqdAccount,
-      dockTokens: tokens,
-      requestDate: new Date().toISOString()
-    };
-    setMessage(migrationData)
+    const alreadyMigrated = await checkIfAlreadyMigrated(accountId);
+    setAlreadyMigrated(alreadyMigrated);
+    if (!alreadyMigrated) {
+      const tokens = await fetchAccountBalance(accountId);
+      const migrationData = {
+        dockAccount: accountId,
+        cheqdAccount: cheqdAccount,
+        dockTokens: tokens,
+        requestDate: new Date().toISOString()
+      };
+      setMessage(migrationData)
+    }
   };
 
   const handleCheqdAccountChange = (e) => {
@@ -111,6 +122,11 @@ const Migrations = () => {
       alert('Please enter a valid cheqd account');
       return;
     }
+    if (alreadyMigrated) {
+      alert('This Dock account has already been migrated');
+      return;
+    }
+    
     const { web3FromAddress } = await import('@polkadot/extension-dapp');
     const injector = await web3FromAddress(selectedAccount);
     const signRaw = injector.signer.signRaw;
@@ -120,6 +136,19 @@ const Migrations = () => {
       type: 'bytes'
     });
     setSignature(signature);
+
+    const migrationObject = {
+      ...message,
+      signature
+    };
+
+    await fetch('/api/migrations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(migrationObject)
+    });
   };
 
   return (
@@ -207,6 +236,11 @@ const Migrations = () => {
                   DOCK Balance: {balance} DOCK<br />
                   Expected migrated CHEQ Balance: {convertDockToCheqd(balance)} CHEQ
                 </Typography>
+                {alreadyMigrated && (
+                  <Typography variant="body1" color="error" sx={{ mt: 2 }}>
+                    This Dock account has already been migrated.
+                  </Typography>
+                )}
               </>
             )}
           </Box>
@@ -221,7 +255,7 @@ const Migrations = () => {
         helperText={cheqdAddressError}
         sx={{ mt: 2 }}
       />
-      <Button variant="contained" color="secondary" onClick={handleSignMessage} sx={{ mt: 2, mb: 2 }}>
+      <Button variant="contained" color="secondary" onClick={handleSignMessage} sx={{ mt: 2, mb: 2 }} disabled={alreadyMigrated}>
         Sign & Submit
       </Button>
       {signature && (
