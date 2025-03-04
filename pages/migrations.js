@@ -45,7 +45,6 @@ const Migrations = () => {
   }
 
   const fetchAccountBalance = async (accountId) => {
-    setLoading(true);
     const res = await fetch(`/api/query?accountId=${accountId}&type=account&consensus=pos`);
     const data = await res.json();
     let tokenBalance = 0;
@@ -53,7 +52,6 @@ const Migrations = () => {
       tokenBalance = data[0].balance;
     } 
     setBalance(tokenBalance);
-    setLoading(false);
     
     return tokenBalance;
   };
@@ -65,8 +63,10 @@ const Migrations = () => {
   };
 
   const handleSelectedAccountChange = async (e) => {
+    setLoading(true);
     const accountId = e.target.value;
     setSelectedAccount(accountId);
+    setBalance(0);
     const alreadyMigrated = await checkIfAlreadyMigrated(accountId);
     setAlreadyMigrated(alreadyMigrated);
     if (!alreadyMigrated) {
@@ -79,6 +79,7 @@ const Migrations = () => {
       };
       setMessage(migrationData)
     }
+    setLoading(false);
   };
 
   const handleCheqdAccountChange = (e) => {
@@ -241,10 +242,12 @@ const Migrations = () => {
               </Box>
             ) : (
               <>
-                <Typography variant="body1" sx={{ mt: 2 }}>
-                  DOCK Balance: {balance} DOCK<br />
-                  Expected migrated CHEQ Balance: {convertDockToCheqd(balance)} CHEQ
-                </Typography>
+                {!alreadyMigrated && (
+                  <Typography variant="body1" sx={{ mt: 2 }}>
+                    DOCK Balance: {balance} DOCK<br />
+                    Expected migrated CHEQ Balance: {convertDockToCheqd(balance)} CHEQ
+                  </Typography>
+                )}
                 {alreadyMigrated && (
                   <Typography variant="body1" color="error" sx={{ mt: 2 }}>
                     This Dock account has already been migrated.
