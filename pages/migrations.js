@@ -1,16 +1,19 @@
 import { useState, useEffect } from 'react';
 import { Container, Button, Typography, Box, FormControl, InputLabel, Select, MenuItem, TextField, CircularProgress } from '@mui/material';
 import dynamic from 'next/dynamic';
+import { fromBech32 } from '@cosmjs/encoding';
 
 const DOCK_SS58_FORMAT = 22;
 
 const Migrations = () => {
   const [accounts, setAccounts] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState('');
+  const [cheqdAccount, setCheqdAccount] = useState('');
   const [message, setMessage] = useState('');
   const [signature, setSignature] = useState('');
   const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [cheqdAddressError, setCheqdAddressError] = useState('');
 
   useEffect(() => {
     const enableExtension = async () => {
@@ -21,7 +24,7 @@ const Migrations = () => {
           console.log('No extension installed');
           return;
         }
-        const allAccounts = await web3Accounts({ss58Format: DOCK_SS58_FORMAT});
+        const allAccounts = await web3Accounts({ ss58Format: DOCK_SS58_FORMAT });
         console.log('Accounts:', allAccounts); // Log the full account object for debugging
         setAccounts(allAccounts);
       }
@@ -58,16 +61,54 @@ const Migrations = () => {
     const tokens = await fetchAccountBalance(accountId);
     const migrationData = {
       dockAccount: accountId,
-      cheqdAccount: '',
+      cheqdAccount: cheqdAccount,
       dockTokens: tokens,
       requestDate: new Date().toISOString()
     };
     setMessage(migrationData)
   };
 
+  const handleCheqdAccountChange = (e) => {
+    const address = e.target.value;
+    setCheqdAccount(address);
+    if (isValidCheqdAddress(address)) {
+      setCheqdAddressError('');
+      const migrationData = {
+        dockAccount: selectedAccount,
+        cheqdAccount: address,
+        dockTokens: balance,
+        requestDate: new Date().toISOString()
+      };
+      setMessage(migrationData);
+    } else {
+      setCheqdAddressError('Invalid cheqd address');
+    }
+  };
+
+  function isValidCheqdAddress(address) {
+    try {
+      const decoded = fromBech32(address);
+      if (decoded.prefix !== 'cheqd') {
+        return false;
+      }
+  
+      if (decoded.data.length !== 20) {
+        return false;
+      }
+  
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+  
   const handleSignMessage = async () => {
     if (!selectedAccount) {
       alert('Please select an account');
+      return;
+    }
+    if (!cheqdAccount || cheqdAddressError) {
+      alert('Please enter a valid cheqd account');
       return;
     }
     const { web3FromAddress } = await import('@polkadot/extension-dapp');
@@ -171,6 +212,15 @@ const Migrations = () => {
           </Box>
         )}
       </FormControl>
+      <TextField
+        label="Cheqd Account"
+        variant="outlined"
+        value={cheqdAccount}
+        onChange={handleCheqdAccountChange}
+        error={!!cheqdAddressError}
+        helperText={cheqdAddressError}
+        sx={{ mt: 2 }}
+      />
       <Button variant="contained" color="secondary" onClick={handleSignMessage} sx={{ mt: 2, mb: 2 }}>
         Sign & Submit
       </Button>
