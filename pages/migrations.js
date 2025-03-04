@@ -123,7 +123,7 @@ const Migrations = () => {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <Typography variant="h4" component="h1" gutterBottom>
         Dock Blockchain Migration
       </Typography>
