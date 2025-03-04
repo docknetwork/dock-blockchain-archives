@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { Container, Button, Typography, Box, FormControl, InputLabel, Select, MenuItem, TextField, CircularProgress } from '@mui/material';
 import dynamic from 'next/dynamic';
 import { fromBech32 } from '@cosmjs/encoding';
@@ -6,6 +7,7 @@ import { fromBech32 } from '@cosmjs/encoding';
 const DOCK_SS58_FORMAT = 22;
 
 const Migrations = () => {
+  const router = useRouter();
   const [accounts, setAccounts] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState('');
   const [cheqdAccount, setCheqdAccount] = useState('');
@@ -142,13 +144,20 @@ const Migrations = () => {
       signature
     };
 
-    await fetch('/api/migrations', {
+    const response = await fetch('/api/migrations', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(migrationObject)
     });
+
+    if (response.ok) {
+      router.push({
+        pathname: '/success',
+        query: { data: JSON.stringify(migrationObject) }
+      });
+    }
   };
 
   return (
@@ -258,19 +267,6 @@ const Migrations = () => {
       <Button variant="contained" color="secondary" onClick={handleSignMessage} sx={{ mt: 2, mb: 2 }} disabled={alreadyMigrated}>
         Sign & Submit
       </Button>
-      {signature && (
-        <Box sx={{ mt: 2, p: 2, backgroundColor: '#f5f5f5', borderRadius: 1 }}>
-          <Typography variant="body1" sx={{ wordBreak: 'break-all', mt: 2 }}
-            label="Message"
-          >
-            Migration data: {JSON.stringify(message, null, "\t")}
-          </Typography>
-          <Typography variant="body1">Signature:</Typography>
-          <Typography variant="body2" sx={{ wordBreak: 'break-all' }}>
-            {signature}
-          </Typography>
-        </Box>
-      )}
     </Container>
   );
 };
