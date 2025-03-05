@@ -170,7 +170,7 @@ const Migrations = () => {
         fontSize: '18px',
         marginBottom: '20px',
       }}>
-        The Dock network has migrated its functionality and all tokens to the cheqd blockchain. This migration will allow Dock to leverage cheqd’s advanced infrastructure and bring enhanced value to both ecosystems. Existing $DOCK tokens will be converted into $CHEQ tokens, ensuring a smooth transition for all token holders. 
+        The Dock network has migrated its functionality and all tokens to the cheqd blockchain. The official migration window ended on March 15, 2025. If you missed the migration window, use this form to submit a migration request.
       </p>
       
       <p style={{
@@ -195,10 +195,10 @@ const Migrations = () => {
           Select your Dock account. If it isn't there follow <a href="https://docs.dock.io/dock-token/dock-token-migration/adding-account-to-the-dock-browser-wallet" target="_blank">these instructions</a>.
         </li>
         <li>
-          Connect your cheqd wallet or enter your cheqd account manually. Connecting a Leap wallet will allow us to confirm that the tokens are going to the cheqd account that you control. 
+          Enter your cheqd account manually.
         </li>
         <li>
-          Accept T&Cs and click <strong>Submit</strong>
+          Accept T&Cs and click <strong>Sign & Submit</strong>
         </li>
         <li>
           Authorize the transaction by entering your account password. Click <strong>Sign & Submit</strong>
@@ -209,7 +209,7 @@ const Migrations = () => {
         fontSize: '18px',
         marginBottom: '20px',
       }}>
-        The entire amount of the account will be migrated at once. After the migration request is submitted your $DOCK tokens will be burnt and you will be sent the converted CHEQD amount with <strong>Swap Ratio</strong>: 18.5178 $DOCK to 1 $CHEQ. The migration will take up to 1-2 business days to complete, after that the converted $CHEQ amount will be available in the indicated cheqd wallet.
+        The entire amount of the account will be migrated at once. After the migration request is submitted your $DOCK tokens will be burnt and you will be sent the converted CHEQD amount with <strong>Swap Ratio</strong>: 18.5178 $DOCK to 1 $CHEQ. The migration could take up to 1-2 weeks to complete, after that the converted $CHEQ amount will be available in the indicated cheqd wallet.
       </p>
       
       <p style={{
