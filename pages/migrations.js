@@ -267,7 +267,7 @@ const Migrations = () => {
         helperText={cheqdAddressError}
         sx={{ mt: 2 }}
       />
-      <Button variant="contained" color="secondary" onClick={handleSignMessage} sx={{ mt: 2, mb: 2 }} disabled={alreadyMigrated}>
+      <Button variant="contained" color="secondary" onClick={handleSignMessage} sx={{ mt: 2, mb: 2 }} disabled={alreadyMigrated || balance === 0 || cheqdAddressError || !cheqdAccount}>
         Sign & Submit
       </Button>
     </Container>
