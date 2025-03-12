@@ -17,6 +17,8 @@ const Migrations = () => {
   const [loading, setLoading] = useState(false);
   const [cheqdAddressError, setCheqdAddressError] = useState('');
   const [alreadyMigrated, setAlreadyMigrated] = useState(false);
+  const [password, setPassword] = useState('');
+  const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
     const enableExtension = async () => {
@@ -57,7 +59,11 @@ const Migrations = () => {
   };
 
   const checkIfAlreadyMigrated = async (accountId) => {
-    const res = await fetch(`/api/migrations?accountId=${accountId}`);
+    const res = await fetch(`/api/migrations?accountId=${accountId}`, {
+      headers: {
+        password: password
+      }
+    });
     const data = await res.json();
     return data.alreadyMigrated;
   };
@@ -148,7 +154,8 @@ const Migrations = () => {
     const response = await fetch('/api/migrations', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        password: password
       },
       body: JSON.stringify(migrationObject)
     });
@@ -160,6 +167,35 @@ const Migrations = () => {
       });
     }
   };
+
+  const handlePasswordSubmit = () => {
+    if (password === process.env.NEXT_PUBLIC_MIGRATIONS_PASSWORD) {
+      setAuthenticated(true);
+    } else {
+      alert('Incorrect password');
+    }
+  };
+
+  if (!authenticated) {
+    return (
+      <Container maxWidth="sm" sx={{ display: 'flex', flexDirection: 'column', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Enter Password
+        </Typography>
+        <TextField
+          label="Password"
+          variant="outlined"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          sx={{ mt: 2 }}
+        />
+        <Button variant="contained" color="primary" onClick={handlePasswordSubmit} sx={{ mt: 2 }}>
+          Submit
+        </Button>
+      </Container>
+    );
+  }
 
   return (
     <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>

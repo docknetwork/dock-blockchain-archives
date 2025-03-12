@@ -3,6 +3,11 @@ import path from 'path';
 
 export default function handler(req, res) {
   const migrationsFilePath = path.join(process.cwd(), 'archives', 'migrations', 'migrations.json');
+  const { password } = req.headers;
+
+  if (password !== process.env.NEXT_PUBLIC_MIGRATIONS_PASSWORD) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
 
   if (req.method === 'GET') {
     const { accountId } = req.query;
