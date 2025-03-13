@@ -168,9 +168,22 @@ const Migrations = () => {
     }
   };
 
-  const handlePasswordSubmit = () => {
-    if (password === process.env.NEXT_PUBLIC_MIGRATIONS_PASSWORD) {
-      setAuthenticated(true);
+  const handlePasswordSubmit = async (e) => {
+    e.preventDefault();
+    const res = await fetch('/api/authenticate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ password })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.authenticated) {
+        setAuthenticated(true);
+      } else {
+        alert('Incorrect password');
+      }
     } else {
       alert('Incorrect password');
     }
@@ -182,17 +195,19 @@ const Migrations = () => {
         <Typography variant="h4" component="h1" gutterBottom>
           Enter Password
         </Typography>
-        <TextField
-          label="Password"
-          variant="outlined"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          sx={{ mt: 2 }}
-        />
-        <Button variant="contained" color="primary" onClick={handlePasswordSubmit} sx={{ mt: 2 }}>
-          Submit
-        </Button>
+        <Box component="form" onSubmit={handlePasswordSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <TextField
+            label="Password"
+            variant="outlined"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            sx={{ mt: 2 }}
+          />
+          <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+            Submit
+          </Button>
+        </Box>
       </Container>
     );
   }
