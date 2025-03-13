@@ -4,7 +4,7 @@ import { Container, Button, Typography, Box, FormControl, Select, MenuItem, Text
 import dynamic from 'next/dynamic';
 import { fromBech32 } from '@cosmjs/encoding';
 import { u8aToHex, stringToU8a } from '@polkadot/util';
-import { DOCK_SS58_FORMAT } from './constants.js';
+import { DOCK_SS58_FORMAT } from '../constants.js';
 
 const Migrations = () => {
   const router = useRouter();

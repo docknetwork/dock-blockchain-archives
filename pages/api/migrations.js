@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { cryptoWaitReady, signatureVerify, decodeAddress } from '@polkadot/util-crypto';
 import { u8aToHex, stringToU8a } from '@polkadot/util';
-import { DOCK_SS58_FORMAT } from '../constants.js';
+import { DOCK_SS58_FORMAT } from '../../constants.js';
 
 export default async function handler(req, res) {
   const migrationsFilePath = path.join(process.cwd(), 'archives', 'migrations', 'migrations.json');
