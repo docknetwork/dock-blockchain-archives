@@ -16,8 +16,11 @@ const Success = () => {
       </Typography>
       <Box sx={{ mt: 2, p: 2, backgroundColor: '#f5f5f5', borderRadius: 1 }}>
         <Typography variant="body1" sx={{ wordBreak: 'break-all', mt: 2 }}>
-          Submitted Data: {JSON.stringify(migrationData, null, "\t")}
+          Submitted Data:
         </Typography>
+        <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+          {JSON.stringify(migrationData, null, 2)}
+        </pre>
       </Box>
     </Container>
   );
