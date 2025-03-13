@@ -1,7 +1,10 @@
 import fs from 'fs';
 import path from 'path';
+import { cryptoWaitReady, signatureVerify, decodeAddress } from '@polkadot/util-crypto';
+import { u8aToHex, stringToU8a } from '@polkadot/util';
+import { DOCK_SS58_FORMAT } from '../constants.js';
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   const migrationsFilePath = path.join(process.cwd(), 'archives', 'migrations', 'migrations.json');
   const { password } = req.headers;
 
@@ -21,27 +24,46 @@ export default function handler(req, res) {
     }
   } else if (req.method === 'POST') {
     const migrationObject = req.body;
+    const message = JSON.stringify(migrationObject.message);
 
-    let migrations = [];
-    if (fs.existsSync(migrationsFilePath)) {
-      const fileContent = fs.readFileSync(migrationsFilePath, 'utf8');
-      migrations = JSON.parse(fileContent);
-    } else {
-      res.status(500).json({ error: 'Migrations file not found' });
-      return;
+    // Validate the signature
+    await cryptoWaitReady();
+    const publicKey = decodeAddress(migrationObject.message.dockAccount, false, DOCK_SS58_FORMAT);
+    const hexPublicKey = u8aToHex(publicKey);
+    try {
+      const { isValid } = signatureVerify(
+        stringToU8a(message),
+        migrationObject.signature,
+        hexPublicKey
+      );
+
+      if (!isValid) {
+        return res.status(400).json({ error: 'Invalid signature' });
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(400).json({ error: 'Invalid signature' });
     }
 
-    const migratedAccounts = migrations.map(migration => migration.dockAccount);
-    if (migratedAccounts.includes(migrationObject.dockAccount)) {
-      res.status(400).json({ error: 'This Dock account has already been migrated' });
-      return;
+    try {
+      const response = await fetch(process.env.SLACK_WEBHOOK_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          text: `:see_no_evil: IGNORE - Test migration request:\n\`\`\`${JSON.stringify(migrationObject, null, 2)}\`\`\``
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send message to Slack');
+      }
+
+      res.status(200).json({ message: 'Migration object published to Slack successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to publish migration object to Slack' });
     }
-
-    migrations.push(migrationObject);
-
-    fs.writeFileSync(migrationsFilePath, JSON.stringify(migrations, null, 2));
-
-    res.status(200).json({ message: 'Migration object appended successfully' });
   } else {
     res.status(405).json({ error: 'Method not allowed' });
   }

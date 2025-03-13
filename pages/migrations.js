@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Container, Button, Typography, Box, FormControl, InputLabel, Select, MenuItem, TextField, CircularProgress } from '@mui/material';
+import { Container, Button, Typography, Box, FormControl, Select, MenuItem, TextField, CircularProgress } from '@mui/material';
 import dynamic from 'next/dynamic';
 import { fromBech32 } from '@cosmjs/encoding';
-
-const DOCK_SS58_FORMAT = 22;
+import { u8aToHex, stringToU8a } from '@polkadot/util';
+import { DOCK_SS58_FORMAT } from './constants.js';
 
 const Migrations = () => {
   const router = useRouter();
@@ -141,13 +141,13 @@ const Migrations = () => {
     const signRaw = injector.signer.signRaw;
     const { signature } = await signRaw({
       address: selectedAccount,
-      data: message,
+      data: u8aToHex(stringToU8a(JSON.stringify(message))),
       type: 'bytes'
     });
     setSignature(signature);
 
     const migrationObject = {
-      ...message,
+      message,
       signature
     };
 
