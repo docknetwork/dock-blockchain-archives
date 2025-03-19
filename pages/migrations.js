@@ -242,8 +242,15 @@ const Migrations = () => {
         marginBottom: '20px',
         lineHeight: '34px',
       }}>
+        <li>Connect your DOCK account using the polkadot browser extension.
+          <ol type="a">
+            <li>
+              If you do not have the extension in your browser, download it and import your DOCK account using the recovery phrase or wallet backup JSON file.
+            </li>
+          </ol>
+        </li>
         <li>
-          Select your Dock account. If it isn't there follow <a href="https://docs.dock.io/dock-token/dock-token-migration/adding-account-to-the-dock-browser-wallet" target="_blank">these instructions</a>.
+          Select your Dock account.
         </li>
         <li>
           Enter your cheqd account manually.
@@ -267,7 +274,7 @@ const Migrations = () => {
         fontSize: '18px',
         marginBottom: '20px',
       }}>
-        Please follow these instructions carefully and contact our team with any questions at <a href="mailto:support@dock.io">support@dock.io</a>.
+        If you have any questions please reach out to the cheqd team on <a href='https://t.me/cheqd' target='_blank'>Telegram</a>
       </p>
 
       <FormControl sx={{ mt: 2 }}>
