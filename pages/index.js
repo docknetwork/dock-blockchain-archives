@@ -66,6 +66,7 @@ export default function Home() {
             variant="outlined"
           >
             <MenuItem value="poa">Proof of Authority</MenuItem>
+            <MenuItem value="pos">Proof of Stake</MenuItem>
           </Select>
            <FormHelperText>The version of the Dock network you want to query</FormHelperText>
         </FormControl>
