@@ -65,8 +65,8 @@ export default function Home() {
             onChange={handleConsensusChange}
             variant="outlined"
           >
+            <MenuItem value="pos">Proof of Stake (updated March 19, 2025)</MenuItem>
             <MenuItem value="poa">Proof of Authority</MenuItem>
-            <MenuItem value="pos">Proof of Stake</MenuItem>
           </Select>
            <FormHelperText>The version of the Dock network you want to query</FormHelperText>
         </FormControl>
