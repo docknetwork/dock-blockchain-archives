@@ -5,7 +5,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 export default function Home() {
   const [accountId, setAccountId] = useState('');
   const [type, setType] = useState('account');
-  const [consensus, setConsensus] = useState('poa');
+  const [consensus, setConsensus] = useState('pos');
   const [results, setResults] = useState([]);
 
   const handleSubmit = async (e) => {
