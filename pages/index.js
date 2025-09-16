@@ -7,6 +7,7 @@ export default function Home() {
   const [type, setType] = useState('account');
   const [consensus, setConsensus] = useState('pos');
   const [results, setResults] = useState([]);
+  const [emissions, setEmissions] = useState(0);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,9 +26,13 @@ export default function Home() {
     setResults([]);
   };
 
-  const handleConsensusChange = (e) => {
+  const handleConsensusChange = async (e) => {
     setConsensus(e.target.value);
     setResults([]);
+    setEmissions('Calculating...');
+    const res = await fetch(`/api/emissions?consensus=${e.target.value}`);
+    const response = await res.json();
+    setEmissions(response.emissions || 0);
   };
 
   const handleDownload = () => {
@@ -85,6 +90,11 @@ export default function Home() {
           Query
         </Button>
       </Box>
+      {emissions > 0 && (
+        <Typography variant="h6" component="h2" gutterBottom sx={{ mt: 2 }}>
+          Total Token Emissions: {emissions.toLocaleString()} DOCK
+        </Typography>
+      )}
       <Box sx={{ flexGrow: 1, overflow: 'auto', mt: 4, p: 2, backgroundColor: '#f5f5f5', borderRadius: 1 }}>
         <pre>{JSON.stringify(results, null, 2)}</pre>
       </Box>
