@@ -36,12 +36,8 @@ import path from 'path';
   const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
   let results = {};
 
-  console.log(`Consensus: ${consensus} accounts: ${data.accounts.length}`);
     const total = data.accounts.reduce((sum, account) => {
       sum = sum + (Number(account.balance)||0);
-      if (account.balance > 1000000) {
-        console.log(`account: ${account.address} balance: ${account.balance}`);
-      }
       return sum;
     }, 0);
     if (total) {

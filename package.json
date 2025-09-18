@@ -14,7 +14,7 @@
     "@polkadot/extension-dapp": "^0.43.1",
     "@polkadot/util-crypto": "^13.4.3",
     "@slack/web-api": "^6.3.0",
-    "next": "15.5.8",
+    "next": "^16.1.6",
     "react": "latest",
     "react-dom": "latest"
   }
