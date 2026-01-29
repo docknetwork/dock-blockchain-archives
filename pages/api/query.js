@@ -43,7 +43,11 @@ import path from 'path';
     }
   } else if (type === 'transfer') {
     const transfers = data.transfers.filter(transfer => transfer.from === accountId || transfer.to === accountId);
-    results = results.concat(transfers);
+    const transfersWithTimestamp = transfers.map(transfer => ({
+      ...transfer,
+      timestamp: new Date(transfer.block_timestamp * 1000).toISOString()
+    }));
+    results = results.concat(transfersWithTimestamp);
   }
 
   res.status(200).json(results);
