@@ -1,0 +1,23 @@
+{
+  "address": "3D12KuAYYaekQty8Vi9m8netgAngPFQzSnGGYsEYdmVSQg69",
+  "rewards": [
+    {
+      "id": 76324600011,
+      "block_num": 763246,
+      "extrinsic_idx": 1,
+      "stash": "3HUihnP3jAm6stsiv2qmxxpM8YcoepZXiRC9oRGuU75oYkDZ",
+      "account": "3D12KuAYYaekQty8Vi9m8netgAngPFQzSnGGYsEYdmVSQg69",
+      "module_id": "staking",
+      "event_id": "Reward",
+      "event_method": "Reward",
+      "params": "[{\"type\":\"AccountId\",\"value\":\"e432d3b70770226a41311ce889e2eaa7b31635ebc09fcad8f361ae17d4af0276\"},{\"type\":\"Balance\",\"value\":2593252}]",
+      "extrinsic_hash": "0x58ae164b81c19a4ad6e3bbd9266a35742ed7278a29d052bd5766a22d6bda2810",
+      "event_idx": 11,
+      "amount": "2593252",
+      "block_timestamp": 1628063565,
+      "event_index": "763246-11",
+      "extrinsic_index": "763246-1",
+      "utc_timestamp": "2021-08-04T07:52:45.000Z"
+    }
+  ]
+}

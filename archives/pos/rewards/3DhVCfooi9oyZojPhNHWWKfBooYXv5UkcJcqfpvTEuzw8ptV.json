@@ -1,0 +1,59 @@
+{
+  "address": "3DhVCfooi9oyZojPhNHWWKfBooYXv5UkcJcqfpvTEuzw8ptV",
+  "rewards": [
+    {
+      "id": 76324900003,
+      "block_num": 763249,
+      "extrinsic_idx": 1,
+      "stash": "3DhVCfooi9oyZojPhNHWWKfBooYXv5UkcJcqfpvTEuzw8ptV",
+      "account": "3DhVCfooi9oyZojPhNHWWKfBooYXv5UkcJcqfpvTEuzw8ptV",
+      "module_id": "staking",
+      "event_id": "Reward",
+      "event_method": "Reward",
+      "params": "[{\"type\":\"AccountId\",\"value\":\"3cfea1bf75b2db7549c79872780a7b04370e115a3c29aec0cecb61cc8fb18c32\"},{\"type\":\"Balance\",\"value\":3742970}]",
+      "extrinsic_hash": "0x44049931dbdc05a061e319c598b21fde34a3d54e650a01f48ffe5be05fb67195",
+      "event_idx": 3,
+      "amount": "3742970",
+      "block_timestamp": 1628063574,
+      "event_index": "763249-3",
+      "extrinsic_index": "763249-1",
+      "utc_timestamp": "2021-08-04T07:52:54.000Z"
+    },
+    {
+      "id": 76324500003,
+      "block_num": 763245,
+      "extrinsic_idx": 1,
+      "stash": "3DhVCfooi9oyZojPhNHWWKfBooYXv5UkcJcqfpvTEuzw8ptV",
+      "account": "3DhVCfooi9oyZojPhNHWWKfBooYXv5UkcJcqfpvTEuzw8ptV",
+      "module_id": "staking",
+      "event_id": "Reward",
+      "event_method": "Reward",
+      "params": "[{\"type\":\"AccountId\",\"value\":\"3cfea1bf75b2db7549c79872780a7b04370e115a3c29aec0cecb61cc8fb18c32\"},{\"type\":\"Balance\",\"value\":3077918}]",
+      "extrinsic_hash": "0xe038fa570742208682622b293bd631d4b3abf378d69c389df000f0563e2ba59e",
+      "event_idx": 3,
+      "amount": "3077918",
+      "block_timestamp": 1628063562,
+      "event_index": "763245-3",
+      "extrinsic_index": "763245-1",
+      "utc_timestamp": "2021-08-04T07:52:42.000Z"
+    },
+    {
+      "id": 59826400009,
+      "block_num": 598264,
+      "extrinsic_idx": 1,
+      "stash": "3DhVCfooi9oyZojPhNHWWKfBooYXv5UkcJcqfpvTEuzw8ptV",
+      "account": "3DhVCfooi9oyZojPhNHWWKfBooYXv5UkcJcqfpvTEuzw8ptV",
+      "module_id": "staking",
+      "event_id": "Reward",
+      "event_method": "Reward",
+      "params": "[{\"type\":\"AccountId\",\"value\":\"3cfea1bf75b2db7549c79872780a7b04370e115a3c29aec0cecb61cc8fb18c32\"},{\"type\":\"Balance\",\"value\":2468572}]",
+      "extrinsic_hash": "0xde2402a5d1e3eac8d6564852b749fb4915e8f8ebe621bd590c618f3bd08b2b46",
+      "event_idx": 9,
+      "amount": "2468572",
+      "block_timestamp": 1627510443,
+      "event_index": "598264-9",
+      "extrinsic_index": "598264-1",
+      "utc_timestamp": "2021-07-28T22:14:03.000Z"
+    }
+  ]
+}
