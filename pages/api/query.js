@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import zlib from 'zlib';
 
   const consensusConfig = {
     poa: {
@@ -36,11 +37,13 @@ import path from 'path';
       return res.status(400).json({ error: 'Rewards are only available for PoS consensus' });
     }
     
-    // Read rewards from individual account file
-    const rewardsFilePath = path.join(dataDir, 'rewards', `${accountId}.json`);
+    // Read rewards from individual gzipped account file
+    const rewardsFilePath = path.join(dataDir, 'rewards', `${accountId}.json.gz`);
     
     if (fs.existsSync(rewardsFilePath)) {
-      const rewardsData = JSON.parse(fs.readFileSync(rewardsFilePath, 'utf8'));
+      const compressedData = fs.readFileSync(rewardsFilePath);
+      const decompressedData = zlib.gunzipSync(compressedData);
+      const rewardsData = JSON.parse(decompressedData.toString('utf8'));
       results = rewardsData.rewards || [];
     }
   } else {
